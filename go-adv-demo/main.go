@@ -1,13 +1,18 @@
 package main
 
 import "fmt"
-type User struct {
-	Name string
-}
+
 func main() {
-user := &User{
-	Name: "Dfcz",
+	age:= getAge()
+	canDrink(age)
+	fmt.Println(canDrink(age))
 }
 
-	fmt.Println(user)
+func canDrink(age *int) bool {
+	return *age >=18
+}
+
+func getAge() *int {
+	age := 18
+	return &age
 }
