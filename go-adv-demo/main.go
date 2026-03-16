@@ -3,17 +3,16 @@ package main
 import "fmt"
 
 func main() {
-	age:= getAge()
+	age := getAge()
 	canDrink(age)
 	fmt.Println(canDrink(age))
 }
 
 func canDrink(age *int) bool {
-	return *age >=18
+	return *age >= 18
 }
 
 func getAge() *int {
 	age := 18
 	return &age
 }
-/* ветка создана локально и пушится на Хаб
