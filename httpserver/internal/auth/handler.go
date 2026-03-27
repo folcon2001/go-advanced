@@ -6,6 +6,7 @@ import (
 	"main/configs"
 	"main/pkg/res"
 	"net/http"
+	"regexp"
 )
 
 type AuthHandlerDeps struct {
@@ -36,6 +37,12 @@ func (handler *AuthHandler) Login() http.HandlerFunc {
 
 		if payload.Email == "" {
 			res.Json(w, "Email required", 402)
+			return
+		}
+
+		match, _ := regexp.MatchString(`[A-Za-z)-9\._%+\-]+@[[A-Za-z)-9\.\-]+\.[A-Za-z]{2,}`, payload.Email)
+		if !match {
+			res.Json(w, "Wrong email", 402)
 			return
 		}
 
