@@ -5,6 +5,7 @@ import (
 	"main/configs"
 	"main/internal/auth"
 	"main/internal/link"
+	"main/internal/user"
 	"main/pkg/db"
 	"main/pkg/middleware"
 	"net/http"
@@ -17,19 +18,30 @@ func main() {
 
 	// Repositories
 	linkRepository := link.NewLinkRepository(db)
+	userRepository := user.NewUserRepository(db)
+
+	// Services
+	authService := auth.NewAuthService(userRepository)
 
 	// Handler
 	auth.NewAuthHandler(router, auth.AuthHandlerDeps{
-		Config: conf,
+		Config:      conf,
+		AuthService: authService,
 	})
 
 	link.NewLinkHandler(router, link.LinkHandlerDeps{
 		LinkRepository: linkRepository,
 	})
+	//Middlers
+
+	stack := middleware.Chain(
+		middleware.CORS,
+		middleware.Logging,
+	)
 
 	server := http.Server{
 		Addr:    ":8081",
-		Handler: middleware.Logging(router),
+		Handler: stack(router),
 	}
 	fmt.Println("Server is listening on port 8081")
 	server.ListenAndServe()

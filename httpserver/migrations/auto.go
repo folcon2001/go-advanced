@@ -2,6 +2,7 @@ package main
 
 import (
 	"main/internal/link"
+	"main/internal/user"
 	"os"
 
 	"github.com/joho/godotenv"
@@ -19,5 +20,5 @@ func main() {
 		panic(err)
 	}
 
-	db.AutoMigrate(&link.Link{})
+	db.AutoMigrate(&link.Link{}, &user.User{})
 }
